@@ -798,14 +798,15 @@ stock ValidateLoadedCharacter(playerid)
         PlayerInfo[playerid][pCreationStep] = invalidStep;
         SaveCreationProgress(playerid);
     }
-    else if (PlayerInfo[playerid][pCharacterCompleted])
+    else
     {
-        PlayerInfo[playerid][pCreationStep] = STEP_NONE;
-    }
-    else if (PlayerInfo[playerid][pCreationStep] < STEP_AGE || PlayerInfo[playerid][pCreationStep] > STEP_WEIGHT)
-    {
-        PlayerInfo[playerid][pCreationStep] = STEP_AGE;
-        SaveCreationProgress(playerid);
+        // All persisted fields are valid, so repair stale completion metadata.
+        if (!PlayerInfo[playerid][pCharacterCompleted] || PlayerInfo[playerid][pCreationStep] != STEP_NONE)
+        {
+            PlayerInfo[playerid][pCharacterCompleted] = 1;
+            PlayerInfo[playerid][pCreationStep] = STEP_NONE;
+            SaveCreationProgress(playerid);
+        }
     }
     return 1;
 }
