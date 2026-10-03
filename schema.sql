@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS `users` (
+    `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+    `username` VARCHAR(24) NOT NULL,
+    `password` VARCHAR(60) NOT NULL,
+    `money` INTEGER NOT NULL DEFAULT 500,
+    `score` INTEGER NOT NULL DEFAULT 0,
+    `pos_x` REAL NOT NULL DEFAULT 1958.3783,
+    `pos_y` REAL NOT NULL DEFAULT 1343.1572,
+    `pos_z` REAL NOT NULL DEFAULT 15.3746,
+    `angle` REAL NOT NULL DEFAULT 270.0,
+    `interior` INTEGER NOT NULL DEFAULT 0,
+    `virtual_world` INTEGER NOT NULL DEFAULT 0,
+    `age` INTEGER NOT NULL DEFAULT 0,
+    `eye_color` VARCHAR(16) NOT NULL DEFAULT '',
+    `ethnicity` VARCHAR(32) NOT NULL DEFAULT '',
+    `height_feet` INTEGER NOT NULL DEFAULT 0,
+    `height_inches` INTEGER NOT NULL DEFAULT 0,
+    `weight_lbs` INTEGER NOT NULL DEFAULT 0,
+    `weight_kg` INTEGER NOT NULL DEFAULT 0,
+    `character_completed` INTEGER NOT NULL DEFAULT 0,
+    `creation_step` INTEGER NOT NULL DEFAULT 1,
+    UNIQUE (`username`)
+);

@@ -1,0 +1,59 @@
+{
+  "announce": false,
+  "artwork": {
+    "cdn": "",
+    "enable": true,
+    "models_path": "models",
+    "port": 7777,
+    "web_server_bind": ""
+  },
+  "chat_input_filter": true,
+  "enable_query": true,
+  "game": {
+    "map": "San Andreas",
+    "mode": "OpenMP Roleplay",
+    "time": 12,
+    "weather": 10
+  },
+  "language": "English",
+  "logging": {
+    "enable": true,
+    "file": "log.txt",
+    "log_chat": true,
+    "log_connection_messages": true,
+    "log_deaths": true,
+    "log_queries": false,
+    "log_sqlite": false,
+    "log_sqlite_queries": false,
+    "timestamp_format": "[%Y-%m-%dT%H:%M:%S%z]",
+    "use_prefix": true,
+    "use_timestamp": true
+  },
+  "max_bots": 0,
+  "max_players": 50,
+  "name": "OpenMP Roleplay Server",
+  "network": {
+    "allow_037_clients": true,
+    "bind": "",
+    "port": 7777,
+    "public_addr": ""
+  },
+  "password": "",
+  "pawn": {
+    "legacy_plugins": [
+      "samp_bcrypt"
+    ],
+    "main_scripts": [
+      "roleplay 1"
+    ],
+    "side_scripts": []
+  },
+  "rcon": {
+    "allow_teleport": false,
+    "enable": false,
+    "password": "CHANGE_ME"
+  },
+  "sleep": 5.0,
+  "use_dyn_ticks": true,
+  "website": ""
+}

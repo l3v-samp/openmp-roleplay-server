@@ -1,0 +1,22 @@
+# Runtime and private data
+scriptfiles/*.db
+scriptfiles/*.db-*
+logs/
+log.txt
+bans.json
+
+# Local secrets and overrides
+.env
+*.local.json
+
+# Generated binaries and debug symbols
+gamemodes/*.amx
+*.pdb
+*.dll
+*.exe
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
