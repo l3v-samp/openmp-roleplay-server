@@ -12,6 +12,7 @@ A clean open.mp roleplay starter with persistent SQLite accounts, bcrypt passwor
 - Uses validated lists for eye color, ethnicity, height, and weight.
 - Prevents dialog spoofing and creation-step skipping.
 - Shows completed character data through `/stats`.
+- Provides an RCON-admin-only `/unregister Firstname_Lastname` account removal command.
 - Spawns completed characters immediately after the updates dialog.
 
 ## Requirements

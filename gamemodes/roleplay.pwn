@@ -493,6 +493,32 @@ public OnPlayerCommandText(playerid, cmdtext[])
         ShowCharacterStats(playerid);
         return 1;
     }
+
+    if (!strcmp(cmdtext, "/unregister", true))
+    {
+        SendClientMessage(playerid, 0xFFD966FF, "USAGE: /unregister Firstname_Lastname");
+        return 1;
+    }
+
+    if (!strcmp(cmdtext, "/unregister ", true, 12))
+    {
+        if (!IsPlayerAdmin(playerid))
+        {
+            SendClientMessage(playerid, 0xFF6347FF, "SERVER: This command is restricted to logged-in RCON administrators.");
+            return 1;
+        }
+
+        new targetName[MAX_PLAYER_NAME + 1];
+        strmid(targetName, cmdtext, 12, strlen(cmdtext), sizeof targetName);
+        if (!IsRoleplayName(targetName))
+        {
+            SendClientMessage(playerid, 0xFFD966FF, "USAGE: /unregister Firstname_Lastname");
+            return 1;
+        }
+
+        UnregisterAccount(playerid, targetName);
+        return 1;
+    }
     return 0;
 }
 
@@ -750,7 +776,7 @@ stock SaveCreationProgress(playerid)
 {
     new query[512];
     format(query, sizeof query,
-        "UPDATE `users` SET `age`=%d,`eye_color`='%s',`ethnicity`='%s',`height_feet`=%d,`height_inches`=%d,`weight_kg`=%d,`character_completed`=%d,`creation_step`=%d WHERE `id`=%d LIMIT 1",
+        "UPDATE `users` SET `age`=%d,`eye_color`='%s',`ethnicity`='%s',`height_feet`=%d,`height_inches`=%d,`weight_kg`=%d,`character_completed`=%d,`creation_step`=%d WHERE `id`=%d",
         PlayerInfo[playerid][pAge], PlayerInfo[playerid][pEyeColor], PlayerInfo[playerid][pEthnicity],
         PlayerInfo[playerid][pHeightFeet], PlayerInfo[playerid][pHeightInches], PlayerInfo[playerid][pWeightKg],
         PlayerInfo[playerid][pCharacterCompleted], _:PlayerInfo[playerid][pCreationStep], PlayerInfo[playerid][pID]);
@@ -759,6 +785,47 @@ stock SaveCreationProgress(playerid)
     if (result != DBResult:0)
     {
         DB_FreeResultSet(result);
+    }
+    return 1;
+}
+
+stock UnregisterAccount(playerid, const targetName[])
+{
+    new query[160];
+    format(query, sizeof query, "SELECT `id` FROM `users` WHERE `username`='%s' COLLATE NOCASE LIMIT 1", targetName);
+
+    new DBResult:result = DB_ExecuteQuery(gDatabase, query);
+    if (result == DBResult:0 || DB_GetRowCount(result) == 0)
+    {
+        if (result != DBResult:0) DB_FreeResultSet(result);
+        SendClientMessage(playerid, 0xFF6347FF, "SERVER: No registered account was found with that name.");
+        return 1;
+    }
+
+    new accountID = DB_GetFieldIntByName(result, "id");
+    DB_FreeResultSet(result);
+
+    format(query, sizeof query, "DELETE FROM `users` WHERE `id`=%d", accountID);
+    result = DB_ExecuteQuery(gDatabase, query);
+    if (result == DBResult:0)
+    {
+        SendClientMessage(playerid, 0xFF6347FF, "SERVER: The account could not be unregistered.");
+        return 1;
+    }
+    DB_FreeResultSet(result);
+
+    new message[96];
+    format(message, sizeof message, "SERVER: %s has been unregistered.", targetName);
+    SendClientMessage(playerid, 0x7CFC00FF, message);
+
+    for (new targetid = 0; targetid < MAX_PLAYERS; targetid++)
+    {
+        if (!IsPlayerConnected(targetid)) continue;
+        if (strcmp(PlayerInfo[targetid][pUsername], targetName, true) != 0) continue;
+
+        SendClientMessage(targetid, 0xFF6347FF, "SERVER: Your account has been unregistered by an administrator.");
+        Kick(targetid);
+        break;
     }
     return 1;
 }
@@ -943,7 +1010,7 @@ stock SavePlayer(playerid, reason)
 
     new query[384];
     format(query, sizeof query,
-        "UPDATE `users` SET `money`=%d,`score`=%d,`pos_x`=%f,`pos_y`=%f,`pos_z`=%f,`angle`=%f,`interior`=%d,`virtual_world`=%d WHERE `id`=%d LIMIT 1",
+        "UPDATE `users` SET `money`=%d,`score`=%d,`pos_x`=%f,`pos_y`=%f,`pos_z`=%f,`angle`=%f,`interior`=%d,`virtual_world`=%d WHERE `id`=%d",
         PlayerInfo[playerid][pMoney], PlayerInfo[playerid][pScore],
         PlayerInfo[playerid][pPosX], PlayerInfo[playerid][pPosY], PlayerInfo[playerid][pPosZ], PlayerInfo[playerid][pAngle],
         PlayerInfo[playerid][pInterior], PlayerInfo[playerid][pVirtualWorld], PlayerInfo[playerid][pID]);
